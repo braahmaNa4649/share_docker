@@ -1,0 +1,39 @@
+services:
+  # web:
+  #   image: braahmana/twirss_web
+  #   build:
+  #     context: ./web/
+  #   container_name: twirss_web
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./web/conf:/etc/nginx/conf.d
+  #     - ../app:/var/www/app
+  #     - twirss_socket_data:/var/run/php-fpm
+  #   depends_on:
+  #     - app
+  #   networks:
+  #     - twirss_network
+  share_db:
+    image: braahmana/share_db
+    build:
+      context: ./db/
+    container_name: share_db
+    env_file:
+      - ./db/.env
+    ports:
+      - 3306:3306 # 共有とツールから使う為に開放
+    volumes:
+      - share_db_data:/var/lib/mysql
+    networks:
+      - share_network
+
+networks:
+  share_network:
+    driver: bridge
+
+volumes:
+  # twirss_socket_data:
+  #   driver: local
+  share_db_data:
+    driver: local
